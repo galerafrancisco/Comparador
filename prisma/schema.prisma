@@ -1,0 +1,92 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+enum TipoSolicitud {
+  SERVICIO
+  MATERIAL
+}
+
+enum EstadoSolicitud {
+  NUEVA
+  EN_COTIZACION
+  COMPARACION_LISTA
+  PAGADA
+  CERRADA
+}
+
+model Solicitud {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tipo   TipoSolicitud
+  estado EstadoSolicitud @default(NUEVA)
+
+  clienteNombre   String
+  clienteContacto String
+  zona            String
+
+  archivoNombre String?
+  archivoTipo   String?
+  archivoDatos  Bytes?
+
+  montoTotalOriginal Float?
+
+  // Comparación / conclusión generadas por el operador
+  conclusion String?
+
+  // Cálculo de fee
+  feePorcentaje       Float  @default(0.20)
+  feePisoPorcentaje   Float  @default(0.03)
+  feeTechoPorcentaje  Float  @default(0.07)
+  ahorroEstimado      Float?
+  feeMonto            Float?
+
+  pagadoEn DateTime?
+
+  items        Item[]
+  cotizaciones CotizacionProveedor[]
+}
+
+model Item {
+  id          String  @id @default(cuid())
+  solicitudId String
+  solicitud   Solicitud @relation(fields: [solicitudId], references: [id], onDelete: Cascade)
+
+  descripcion    String
+  unidad         String
+  cantidad       Float
+  precioUnitario Float?
+  flete          Float?
+
+  orden Int @default(0)
+}
+
+model CotizacionProveedor {
+  id          String  @id @default(cuid())
+  solicitudId String
+  solicitud   Solicitud @relation(fields: [solicitudId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+
+  proveedorNombre   String
+  proveedorContacto String
+
+  montoTotal   Float
+  plazoEntrega String?
+  ubicacion    String?
+  condiciones  String?
+
+  esGanadora Boolean @default(false)
+}

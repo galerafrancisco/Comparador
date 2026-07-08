@@ -1,0 +1,60 @@
+@import "tailwindcss";
+
+:root {
+  --background: #0c0c0c;
+  --surface: #141414;
+  --surface-2: #1c1c1c;
+  --border: #2a2a2a;
+  --foreground: #ede8e0;
+  --muted: #918d84;
+  --gold: #c8a96e;
+  --gold-soft: #d4b87e;
+  --savings: #5cb85c;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-savings: var(--savings);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+::selection {
+  background: var(--gold);
+  color: #0c0c0c;
+}
+
+.campo-input {
+  width: 100%;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  padding: 0.6rem 0.85rem;
+  font-size: 0.875rem;
+  color: var(--foreground);
+}
+
+.campo-input::placeholder {
+  color: var(--muted);
+}
+
+.campo-input:focus {
+  outline: none;
+  border-color: var(--gold);
+}
