@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Mi Día</title>
+    <meta name="description" content="Checklists y recordatorios para el trabajo, las obras, los trámites y la familia." />
+    <meta name="theme-color" content="#14161c" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Mi Día" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <link rel="manifest" href="/recordatorios/manifest.webmanifest" />
+    <link rel="icon" href="/recordatorios/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/recordatorios/icon-180.png" />
+    <link rel="stylesheet" href="/recordatorios/styles.css" />
+  </head>
+  <body>
+    <header class="barra">
+      <div>
+        <h1 id="titulo">Mi día</h1>
+        <p id="subtitulo" class="sub"></p>
+      </div>
+      <div class="barra-acciones">
+        <button class="icono" data-action="repaso" title="Repasar ahora" aria-label="Repasar ahora">🔔</button>
+        <button class="icono" data-action="ajustes" title="Ajustes" aria-label="Ajustes">⚙️</button>
+      </div>
+    </header>
+
+    <form id="captura" class="captura" autocomplete="off">
+      <div class="captura-fila">
+        <textarea id="entrada" rows="1" placeholder="Anotá o dictá: “mañana llevar planos a Cardano a las 9”" aria-label="Nueva tarea"></textarea>
+        <button type="button" id="mic" class="icono mic" aria-label="Dictar" title="Dictar">🎤</button>
+        <button type="submit" class="agregar" aria-label="Agregar">＋</button>
+      </div>
+      <div id="vista-previa" class="vista-previa" aria-live="polite"></div>
+    </form>
+
+    <main id="vista" class="vista"></main>
+
+    <nav class="nav" aria-label="Secciones">
+      <button data-vista="hoy" class="activo"><span>📅</span>Hoy</button>
+      <button data-vista="proximo"><span>🗓️</span>Próximo</button>
+      <button data-vista="lugares"><span>📍</span>Voy a…</button>
+      <button data-vista="listas"><span>🗂️</span>Listas</button>
+    </nav>
+
+    <div id="hoja" class="hoja" hidden>
+      <div class="hoja-fondo" data-action="cerrar"></div>
+      <div class="hoja-panel" role="dialog" aria-modal="true">
+        <div id="hoja-contenido"></div>
+      </div>
+    </div>
+
+    <div id="toast" class="toast" hidden></div>
+
+    <script type="module" src="/recordatorios/app.js"></script>
+  </body>
+</html>

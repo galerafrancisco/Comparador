@@ -34,3 +34,18 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Mi Día (recordatorios) — `/recordatorios`
+
+App de checklists y recordatorios personal, instalable en el celular (PWA). Es estática y vive en
+`public/recordatorios/` (más `public/recordatorios-sw.js`); no usa la base de datos: los datos se
+guardan en el dispositivo (con copia de seguridad descargable desde Ajustes).
+
+- Anotar o dictar en lenguaje natural: detecta fecha, hora, momento del día, repetición, ámbito
+  (Barrio Cardano, Obras, Grupo HAT, Mi casa, Casa de mis papás, Personal), tipo (comprar, llevar,
+  traer, ir a buscar, coordinar, reunión, trámite) y lugar donde se resuelve. Las listas
+  ("comprar tornillos, silicona y cemento") se separan en ítems.
+- Vistas: Hoy, Próximo, "Voy a…" (todo lo que se resuelve en un lugar) y Listas por ámbito.
+- Repasos diarios configurables (8:00, 13:30, 20:30) para tildar o reprogramar lo pendiente.
+- Notificaciones con la app abierta o en segundo plano, y exportación `.ics` con alarmas
+  para el calendario del celular, que suenan aunque la app esté cerrada.
