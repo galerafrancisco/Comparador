@@ -194,6 +194,11 @@ h3 {
   align-items: center;
 }
 
+.previa-aviso {
+  color: var(--accent);
+  font-weight: 600;
+}
+
 .previa strong {
   color: var(--text);
   font-weight: 600;

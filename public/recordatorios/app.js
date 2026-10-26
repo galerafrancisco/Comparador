@@ -999,7 +999,9 @@ function actualizarPrevia() {
       return `<div class="previa">${partes.filter(Boolean).join(" ")}</div>`;
     })
     .join("");
-  if (bs.length > 1) $("#vista-previa").insertAdjacentHTML("afterbegin", `<div class="previa">Se van a crear ${bs.length} tareas:</div>`);
+  // Deja claro que todavía no se guardó
+  const aviso = bs.length > 1 ? `Tocá ＋ para guardar estas ${bs.length} tareas:` : "Tocá ＋ para guardar:";
+  $("#vista-previa").insertAdjacentHTML("afterbegin", `<div class="previa previa-aviso">${aviso}</div>`);
 }
 
 function enviarCaptura(e) {
@@ -1205,10 +1207,22 @@ document.addEventListener("submit", (e) => {
 
 entrada.addEventListener("keydown", (e) => {
   // Enter agrega; Shift+Enter hace un salto de línea (para pegar o dictar listas)
-  if (e.key === "Enter" && !e.shiftKey) {
+  if (e.key === "Enter" && !e.shiftKey && !e.isComposing) {
     e.preventDefault();
     $("#captura").requestSubmit();
   }
+  shiftEnter = e.key === "Enter" && e.shiftKey;
+});
+
+// En los teclados de celular (Gboard, etc.) el Enter suele no llegar como keydown:
+// se detecta como salto de línea y se usa para guardar.
+let shiftEnter = false;
+entrada.addEventListener("beforeinput", (e) => {
+  if ((e.inputType === "insertLineBreak" || e.inputType === "insertParagraph") && !shiftEnter) {
+    e.preventDefault();
+    $("#captura").requestSubmit();
+  }
+  shiftEnter = false;
 });
 
 $("#mic").addEventListener("click", dictar);
