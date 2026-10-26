@@ -238,6 +238,7 @@ function htmlTarea(t, opciones = {}) {
       <div class="titulo">${esc(t.title)}</div>
       ${meta.length ? `<div class="meta">${meta.join("")}</div>` : ""}
     </div>
+    <button class="editar-btn" data-action="editar" data-id="${t.id}" aria-label="Editar" title="Editar">✏️</button>
   </li>`;
 }
 
@@ -324,6 +325,10 @@ function vistaHoy() {
   const importantes = ordenar(pendientes().filter((t) => !t.due && t.priority));
   html += seccion("⭐ Importantes sin fecha", importantes);
 
+  // Lo anotado sin fecha también se ve acá, para poder completarlo con ✏️
+  const sinFecha = ordenar(pendientes().filter((t) => !t.due && !t.priority));
+  html += seccion("📥 Sin fecha", sinFecha);
+
   const proximos = ordenar(pendientes().filter((t) => t.due && diasHasta(t.due) >= 1 && diasHasta(t.due) <= 2));
   html += seccion("Se viene", proximos);
 
@@ -332,7 +337,7 @@ function vistaHoy() {
       <ul class="lista">${hechas.map((t) => htmlTarea(t)).join("")}</ul></details>`;
   }
 
-  if (!atr.length && !hoy.length && !importantes.length && !proximos.length && S.tasks.length >= 3) {
+  if (!atr.length && !hoy.length && !importantes.length && !sinFecha.length && !proximos.length && S.tasks.length >= 3) {
     html += `<div class="seccion vacio">Nada urgente por ahora.<br />Mirá <strong>Próximo</strong> o anotá lo que se te venga a la cabeza.</div>`;
   }
   return html;
@@ -487,7 +492,8 @@ function editar(id) {
     ["", "Sin fecha"],
   ];
   abrirHoja(`
-    <div class="hoja-cabecera"><h2>Editar</h2><button class="boton primario" data-action="cerrar">Listo</button></div>
+    <div class="hoja-cabecera"><h2>Editar tarea</h2><button class="boton primario" data-action="cerrar">Listo</button></div>
+    <p class="sub">Los cambios se guardan solos.</p>
     <div data-editar="${t.id}">
       <label class="campo"><span>Qué</span><input class="entrada" data-campo="title" value="${esc(t.title)}" /></label>
       <div class="campo"><span>Fecha</span>
@@ -602,6 +608,7 @@ function pintarRepaso() {
     </div>
     <div class="repaso-acciones">
       <button class="boton hecho ancho" data-repaso="hecho">✅ Sí, lo hice</button>
+      <button class="boton ancho" data-action="editar" data-id="${t.id}">✏️ Editar o completar datos</button>
       <button class="boton" data-repaso="hoy">${atrasada ? "📌 Pasarla a hoy" : "📌 Sigue para hoy"}</button>
       <button class="boton" data-repaso="manana">➡️ Mañana</button>
       <button class="boton" data-repaso="otro">📅 Otro día</button>
@@ -965,9 +972,12 @@ function revisarAvisos() {
 // ---------- Toast ----------
 
 let toastTimer;
-function toast(texto, conDeshacer = false) {
+function toast(texto, conDeshacer = false, editarId = null) {
   const el = $("#toast");
-  el.innerHTML = `<span>${esc(texto)}</span>${conDeshacer && deshacer ? '<button data-action="deshacer">Deshacer</button>' : ""}`;
+  el.innerHTML =
+    `<span>${esc(texto)}</span>` +
+    (editarId ? `<button data-action="editar" data-id="${esc(editarId)}">Editar</button>` : "") +
+    (conDeshacer && deshacer ? '<button data-action="deshacer">Deshacer</button>' : "");
   el.hidden = false;
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => (el.hidden = true), 4000);
@@ -1013,7 +1023,7 @@ function enviarCaptura(e) {
   actualizarPrevia();
   if (creadas.length === 1) {
     const t = creadas[0];
-    toast(`Agregada${t.due ? ` para ${etiquetaFecha(t.due).toLowerCase()}` : ""}`, true);
+    toast(`Agregada${t.due ? ` para ${etiquetaFecha(t.due).toLowerCase()}` : ""}`, true, t.id);
   } else toast(`Agregadas ${creadas.length} tareas`, true);
   render();
 }
@@ -1082,6 +1092,8 @@ document.addEventListener("click", (e) => {
       return cerrarHoja();
     }
     case "editar":
+      repaso = null;
+      $("#toast").hidden = true;
       return editar(id);
     case "eliminar":
       eliminar(id);
