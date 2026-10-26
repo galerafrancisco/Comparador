@@ -1,0 +1,21 @@
+{
+  "name": "Mi Día · Recordatorios",
+  "short_name": "Mi Día",
+  "description": "Checklists y recordatorios para el trabajo, las obras, los trámites y la familia.",
+  "lang": "es-AR",
+  "start_url": "/recordatorios",
+  "scope": "/recordatorios",
+  "display": "standalone",
+  "background_color": "#0f1116",
+  "theme_color": "#14161c",
+  "icons": [
+    { "src": "/recordatorios/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/recordatorios/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/recordatorios/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "/recordatorios/icon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ],
+  "shortcuts": [
+    { "name": "Anotar algo", "url": "/recordatorios?nuevo=1" },
+    { "name": "Repasar pendientes", "url": "/recordatorios?repaso=1" }
+  ]
+}
