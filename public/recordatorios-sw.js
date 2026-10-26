@@ -1,5 +1,5 @@
 // Service worker de "Mi Día" (/recordatorios): funciona sin conexión y maneja los toques en las notificaciones.
-const CACHE = "mi-dia-v1";
+const CACHE = "mi-dia-v2";
 const ARCHIVOS = [
   "/recordatorios",
   "/recordatorios/styles.css",
